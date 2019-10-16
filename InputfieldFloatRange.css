@@ -7,7 +7,7 @@
 
 .InputfieldFloatRange__display
 {
-    width: 100px !important;
+    width: 120px !important;
 
     text-align: center;
 
@@ -16,14 +16,23 @@
 
 .InputfieldFloatRange input[type=range]
 {
-    width: 80%;
-    width: calc(100% - 100px);
+    width: 100%;
     margin: 8px 0;
-
-    border-right: none !important;
 
     -webkit-appearance: none;
 }
+.InputfieldFloatRange input[type=range].InputfieldFloatRange--without-value
+{
+    width: 100%;
+}
+
+.InputfieldFloatRange input[type=range].InputfieldFloatRange--with-value
+{
+    border-right: none !important;
+    width: 80%;
+    width: calc(100% - 120px);
+}
+
 .InputfieldFloatRange input[type=range]:focus
 {
     outline: none;
