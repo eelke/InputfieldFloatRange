@@ -1,0 +1,77 @@
+<?php namespace ProcessWire;
+
+/**
+* ProcessWire FloatRange Inputfield
+* By @eelkenet, https://eelke.net
+*/
+
+class InputfieldFloatRange extends InputfieldFloat {
+
+	public static function getModuleInfo() {
+		return array(
+			'title' => __('Float (Range)', __FILE__),
+			'summary' => __('Range slider inputfield, with precision', __FILE__), // Module Summary
+			'version' => 001,
+			'permanent' => false,
+			'requires' => ["FieldtypeFloatRange"]
+		);
+	}
+
+	public function init() {
+		parent::init();
+		$this->set("inputType", 'range');
+		$this->attr("step", "any"); // blank means not set
+	}
+
+	public function render(){
+
+		$otherFields = $this->config->js('InputfieldFloatRange') ? $this->config->js('InputfieldFloatRange') : [];
+
+		$this->config->js('InputfieldFloatRange', array_merge($otherFields, [
+			"Inputfield_" . $this->attr("name") => [
+				'precision' => $this->get("precision"),
+				'min' => $this->attr("min"),
+				'max' => $this->attr("max"),
+				'step' => $this->attr("step")
+			]
+		]));
+
+		$out = parent::render();
+		$name = $this->attr('name');
+
+		$out .= "<input type='text' class='InputfieldFloatRange__display' value='$this->value' />";
+
+		return $out;
+
+	}
+
+	/**
+	 * Extend InputfieldFloat's inputType option with 'range'
+	 */
+
+	public function getConfigInputfields() {
+		$inputfields = parent::getConfigInputfields();
+
+		$f = $inputfields->get("inputType");
+		$f->addOption('range', $this->_('Range'));
+		$f->attr('value', $this->inputType);
+
+		$f = $inputfields->get("min");
+		$f->columnWidth = 33;
+
+		$f = $inputfields->get("max");
+		$f->columnWidth = 33;
+
+		$f = $this->modules->get('InputfieldFloat');
+		$f->attr('name', 'step');
+		$f->attr('value', (float) $this->attr("step"));
+		$f->label = $this->_('Step');
+		$f->columnWidth = 34;
+		$f->description = $this->_('Step increment (float). Leave blank to ignore');
+		$inputfields->add($f);
+
+		return $inputfields;
+	}
+
+
+}

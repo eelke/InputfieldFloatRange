@@ -1,0 +1,27 @@
+<?php namespace ProcessWire;
+
+/**
+* ProcessWire FloatRange Inputfield
+* By @eelkenet, https://eelke.net
+*/
+
+class FieldtypeFloatRange extends FieldtypeFloat {
+
+	public static function getModuleInfo() {
+		return array(
+			'title' => __('Float (Range)', __FILE__),
+			'summary' => __('Fieldtype for the range slider inputfield', __FILE__), // Module Summary
+			'version' => 001,
+			'permanent' => false,
+			'installs' => ["InputfieldFloatRange"]
+		);
+	}
+
+	public function getInputfield(Page $page, Field $field) {
+		$inputfield = $this->modules->get('InputfieldFloatRange');
+		$inputfield->class = $this->className();
+		$inputfield->precision = $field->precision;
+		return $inputfield;
+	}
+
+}
