@@ -3,7 +3,8 @@ Float (Range) InputField
 
 ### What is it?
 
-The missing range slider Inputfield for Processwire.
+The missing range slider Inputfield for Processwire. 
+See also the [Forum thread](https://processwire.com/talk/topic/22430-inputfieldfloatrange-a-range-slider-inputfield/?tab=comments#comment-192449)
 
 ### What does it do?
 
@@ -24,8 +25,14 @@ It includes a visible and editable value field, to override/tweak the value if r
 - Create new field of type `Float (range)` or convert an existing `Float`, `Integer` or `Text` field.
 - To render the field's value simply echo `$page->field`
 
+### Demo
+A field with Min=0, Max=1, Step=0.2, Precision=2:
+![](demo/RangeSlider-demo-1.gif)
 
 #### Todo
 
 - Make the display-field optional
+- Make the display-field's size configurable (will use the Input Size field setting) 
 - Hopefully become redundant
+- If it's usable for others I'll add it to the Modules list
+
