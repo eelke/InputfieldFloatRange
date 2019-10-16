@@ -20,7 +20,7 @@ class InputfieldFloatRange extends InputfieldFloat {
 	public function init() {
 		parent::init();
 		$this->set("inputType", 'range');
-		$this->attr("step", "any"); // blank means not set
+		$this->attr("step", ""); // blank means not set
 	}
 
 	public function render(){
@@ -32,12 +32,13 @@ class InputfieldFloatRange extends InputfieldFloat {
 				'precision' => $this->get("precision"),
 				'min' => $this->attr("min"),
 				'max' => $this->attr("max"),
-				'step' => $this->attr("step")
+				'step' => (float) $this->attr("step")
 			]
 		]));
 
-		$out = parent::render();
+		if ($this->attr("step") == "") $this->attr("step", "any");
 		$name = $this->attr('name');
+		$out = parent::render();
 
 		$out .= "<input type='text' class='InputfieldFloatRange__display' value='$this->value' />";
 
@@ -62,9 +63,9 @@ class InputfieldFloatRange extends InputfieldFloat {
 		$f = $inputfields->get("max");
 		$f->columnWidth = 33;
 
-		$f = $this->modules->get('InputfieldFloat');
+		$f = $this->modules->get('InputfieldText');
 		$f->attr('name', 'step');
-		$f->attr('value', (float) $this->attr("step"));
+		$f->attr('value', $this->attr("step") !== "" ? (float) str_replace(",",".",$this->attr("step")) : "");
 		$f->label = $this->_('Step');
 		$f->columnWidth = 34;
 		$f->description = $this->_('Step increment (float). Leave blank to ignore');

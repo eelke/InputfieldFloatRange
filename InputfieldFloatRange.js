@@ -54,7 +54,7 @@ $(document).ready(function() {
         if (settings.max !== "") minMaxValue = Math.min(settings.max, minMaxValue);
 
         // If there is a set step value, round value to nearest step
-        if (settings.step !== "any"){
+        if (settings.step !== "" && settings.step !==  0){
             var step = parseFloat(settings.step);
             minMaxValue = step * Math.round(minMaxValue / step);
         }
