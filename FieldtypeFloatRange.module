@@ -11,8 +11,12 @@ class FieldtypeFloatRange extends FieldtypeFloat {
 		return array(
 			'title' => __('Float (Range)', __FILE__),
 			'summary' => __('Fieldtype for the range slider inputfield', __FILE__), // Module Summary
-			'version' => 001,
 			'permanent' => false,
+			'version' => 002,
+			'icon' => 'sliders',
+			'href' => 'https://github.com/eelke/InputfieldFloatRange',
+			'author' => 'Eelke Feenstra, eelke.net',
+			'requires' => ["ProcessWire>=3.0.83"],
 			'installs' => ["InputfieldFloatRange"]
 		);
 	}

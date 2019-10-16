@@ -11,15 +11,18 @@ class InputfieldFloatRange extends InputfieldFloat {
 		return array(
 			'title' => __('Float (Range)', __FILE__),
 			'summary' => __('Range slider inputfield, with precision', __FILE__), // Module Summary
-			'version' => 002,
+			'version' => 003,
 			'permanent' => false,
-			'requires' => ["FieldtypeFloatRange"]
+			'icon' => 'sliders',
+			'href' => 'https://github.com/eelke/InputfieldFloatRange',
+			'author' => 'Eelke Feenstra, eelke.net',
+			'requires' => ["FieldtypeFloatRange", "ProcessWire>=3.0.83"]
 		);
 	}
 
 	public function init() {
 		parent::init();
-        $this->set('displayValueField', 0);
+		$this->set('displayValueField', 0);
 		$this->set("inputType", 'range');
 		$this->attr("step", ""); // blank means not set
 	}
@@ -38,13 +41,13 @@ class InputfieldFloatRange extends InputfieldFloat {
 		]));
 
 		if ($this->attr("step") == "") $this->attr("step", "any");
-        $this->addClass($this->get("displayValueField") ? "InputfieldFloatRange--with-value" : "InputfieldFloatRange--without-value");
+		$this->addClass($this->get("displayValueField") ? "InputfieldFloatRange--with-value" : "InputfieldFloatRange--without-value");
 		$out = parent::render();
 
-        if ($this->get("displayValueField")){
-            $name = $this->attr('name');
-            $out .= "<input type='text' class='InputfieldFloatRange__display' value='$this->value' />";
-        }
+		if ($this->get("displayValueField")){
+			$name = $this->attr('name');
+			$out .= "<input type='text' class='InputfieldFloatRange__display' value='$this->value' />";
+		}
 
 		return $out;
 
@@ -76,13 +79,13 @@ class InputfieldFloatRange extends InputfieldFloat {
 		$inputfields->add($f);
 
 		$f = $this->modules->get('InputfieldCheckbox');
-        $f->attr('name', 'displayValueField');
-        $f->set("value", 1);
-        $f->attr('checked', $this->get('displayValueField') == 1 ? 'checked' : '');
-        $f->label = $this->_('Show value next to slider');
-        $f->label2 = $this->_('Show');
-        $f->description = $this->_('Display the input of the field next to the slider');
-        $f->columnWidth = 50;
+		$f->attr('name', 'displayValueField');
+		$f->set("value", 1);
+		$f->attr('checked', $this->get('displayValueField') == 1 ? 'checked' : '');
+		$f->label = $this->_('Show value next to slider');
+		$f->label2 = $this->_('Show');
+		$f->description = $this->_('Display the input of the field next to the slider');
+		$f->columnWidth = 50;
 
 		$inputfields->add($f);
 
