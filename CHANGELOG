@@ -1,0 +1,18 @@
+InputfieldFloatRange changelog
+------------------------------
+
+004
+- Make rounding of manually entered values configurable (floor, round, ceil or disable)
+- Fix small JS bug when the value-display field was not displayed
+- Update README
+
+003
+- Code cleanup, add some ModuleInfo data & LICENSE
+- Submit to PW Modules directory (http://modules.processwire.com/modules/inputfield-float-range/)
+
+002
+- Fix issue where setting the step value to an empty value created problem with validation
+- Make the display-field optional
+
+001
+- Initial release

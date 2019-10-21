@@ -18,7 +18,9 @@ $(document).ready(function() {
         if ($(event.target).hasClass("InputfieldFloatRange__display")) return;
 
         var settings = getSettings(event.target.id);
-        event.target.nextSibling.value = parseFloat(event.target.value).toFixed(settings.precision);
+        if (settings.displayValueField){
+            event.target.nextSibling.value = parseFloat(event.target.value).toFixed(settings.precision);
+        }
     });
 
     // Forward changes in textfield to range slider
@@ -54,9 +56,11 @@ $(document).ready(function() {
         if (settings.max !== "") minMaxValue = Math.min(settings.max, minMaxValue);
 
         // If there is a set step value, round value to nearest step
-        if (settings.step !== "" && settings.step !==  0){
+        if (settings.step !== "" && settings.step !==  0 && settings.rounding !== "disabled"){
             var step = parseFloat(settings.step);
-            minMaxValue = step * Math.round(minMaxValue / step);
+            if (settings.rounding === "round") minMaxValue = step * Math.round(minMaxValue / step);
+            else if (settings.rounding === "floor") minMaxValue = step * Math.floor(minMaxValue / step);
+            else if (settings.rounding === "ceil") minMaxValue = step * Math.ceil(minMaxValue / step);
         }
 
         if (!isNaN(minMaxValue)) {
