@@ -1,9 +1,12 @@
 InputfieldFloatRange changelog
 ------------------------------
 
+005
+- Fix bug where the Inputfield would not work properly within repeaters / repeater matrices
+
 004
 - Make rounding of manually entered values configurable (floor, round, ceil or disable)
-- Fix small JS bug when the value-display field was not displayed
+- Fix small JS bug where the value-display field was not displayed
 - Update README
 
 003

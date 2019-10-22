@@ -4,6 +4,10 @@
  */
 
 function getSettings(id) {
+
+    // Allow for field to work within a repeater (-matrix).
+    if (id.indexOf("_repeater") > 0) id = id.split("_repeater")[0];
+
     return window.ProcessWire.config.InputfieldFloatRange[id];
 }
 

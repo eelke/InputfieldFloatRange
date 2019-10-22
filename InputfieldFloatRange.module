@@ -11,7 +11,7 @@ class InputfieldFloatRange extends InputfieldFloat {
 		return array(
 			'title' => __('Float (Range)', __FILE__),
 			'summary' => __('Range slider inputfield, with precision, step values & optional manual override', __FILE__), // Module Summary
-			'version' => 004,
+			'version' => 005,
 			'permanent' => false,
 			'icon' => 'sliders',
 			'href' => 'https://github.com/eelke/InputfieldFloatRange',
@@ -30,7 +30,9 @@ class InputfieldFloatRange extends InputfieldFloat {
 		$this->attr("max", "100");
 	}
 
-	public function render(){
+	public function renderReady(Inputfield $parent = null, $renderValueMode = false){
+
+		parent::renderReady();
 
 		$otherFields = $this->config->js('InputfieldFloatRange') ? $this->config->js('InputfieldFloatRange') : [];
 
@@ -44,6 +46,10 @@ class InputfieldFloatRange extends InputfieldFloat {
 				'step' => (float) $this->attr("step")
 			]
 		]));
+
+	}
+
+	public function render(){
 
 		if ($this->attr("step") == "" || ($this->get("displayValueField") && $this->get("roundingMethod") == 'disabled')) {
 			$this->attr("step", "any");
@@ -65,7 +71,7 @@ class InputfieldFloatRange extends InputfieldFloat {
 			$this->attr('type', $value);
 		} else if($key == 'min' || $key == 'max' || $key == "step") {
 			if(strlen("$value")) {
-    			$value = strpos($value, ",") !== false ? str_replace(",",".",$value) : $value;
+				$value = strpos($value, ",") !== false ? str_replace(",",".",$value) : $value;
 				$value = strpos($value, '.') !== false ? (float) $value : (int) $value;
 			}
 		}
@@ -128,6 +134,5 @@ class InputfieldFloatRange extends InputfieldFloat {
 
 		return $inputfields;
 	}
-
 
 }
