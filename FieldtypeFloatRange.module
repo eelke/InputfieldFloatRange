@@ -1,31 +1,34 @@
-<?php namespace ProcessWire;
+<?php
+
+namespace ProcessWire;
 
 /**
-* ProcessWire FloatRange Inputfield
-* By @eelkenet, https://eelke.net
-*/
+ * ProcessWire FloatRange Inputfield
+ * By @eelkenet, https://eelke.net
+ */
 
-class FieldtypeFloatRange extends FieldtypeFloat {
+class FieldtypeFloatRange extends FieldtypeFloat
+{
 
-	public static function getModuleInfo() {
+	public static function getModuleInfo()
+	{
 		return array(
 			'title' => __('Float (Range)', __FILE__),
 			'summary' => __('Fieldtype for the range slider inputfield', __FILE__), // Module Summary
 			'permanent' => false,
-			'version' => 002,
+			'version' => 003,
 			'icon' => 'sliders',
 			'href' => 'https://github.com/eelke/InputfieldFloatRange',
 			'author' => 'Eelke Feenstra, eelke.net',
-			'requires' => ["ProcessWire>=3.0.83"],
-			'installs' => ["InputfieldFloatRange"]
+			'requires' => ["InputfieldFloatRange", "ProcessWire>=3.0.83"],
 		);
 	}
 
-	public function getInputfield(Page $page, Field $field) {
+	public function getInputfield(Page $page, Field $field)
+	{
 		$inputfield = $this->modules->get('InputfieldFloatRange');
 		$inputfield->class = $this->className();
 		$inputfield->precision = $field->precision;
 		return $inputfield;
 	}
-
 }

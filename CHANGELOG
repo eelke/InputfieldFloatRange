@@ -1,6 +1,10 @@
 InputfieldFloatRange changelog
 ------------------------------
 
+006 
+- Fix bug where InputfieldFloat negative precision prevented the displayed value to be updated properly
+- Revert installs & requires, so direct installs from Modules Directory (should) work 
+
 005
 - Fix bug where the Inputfield would not work properly within repeaters / repeater matrices
 

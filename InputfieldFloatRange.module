@@ -1,26 +1,32 @@
-<?php namespace ProcessWire;
+<?php
+
+namespace ProcessWire;
 
 /**
-* ProcessWire FloatRange Inputfield
-* By @eelkenet, https://eelke.net
-*/
+ * ProcessWire FloatRange Inputfield
+ * By @eelkenet, https://eelke.net
+ */
 
-class InputfieldFloatRange extends InputfieldFloat {
+class InputfieldFloatRange extends InputfieldFloat
+{
 
-	public static function getModuleInfo() {
+	public static function getModuleInfo()
+	{
 		return array(
 			'title' => __('Float (Range)', __FILE__),
 			'summary' => __('Range slider inputfield, with precision, step values & optional manual override', __FILE__), // Module Summary
-			'version' => 005,
+			'version' => 006,
 			'permanent' => false,
 			'icon' => 'sliders',
 			'href' => 'https://github.com/eelke/InputfieldFloatRange',
 			'author' => 'Eelke Feenstra, eelke.net',
-			'requires' => ["FieldtypeFloatRange", "ProcessWire>=3.0.83"]
+			'installs' => ["FieldtypeFloatRange"],
+			'requires' => ["ProcessWire>=3.0.83"]
 		);
 	}
 
-	public function init() {
+	public function init()
+	{
 		parent::init();
 		$this->set('displayValueField', 0);
 		$this->set("inputType", 'range');
@@ -30,7 +36,8 @@ class InputfieldFloatRange extends InputfieldFloat {
 		$this->attr("max", "100");
 	}
 
-	public function renderReady(Inputfield $parent = null, $renderValueMode = false){
+	public function renderReady(Inputfield $parent = null, $renderValueMode = false)
+	{
 
 		parent::renderReady();
 
@@ -46,10 +53,10 @@ class InputfieldFloatRange extends InputfieldFloat {
 				'step' => (float) $this->attr("step")
 			]
 		]));
-
 	}
 
-	public function render(){
+	public function render()
+	{
 
 		if ($this->attr("step") == "" || ($this->get("displayValueField") && $this->get("roundingMethod") == 'disabled')) {
 			$this->attr("step", "any");
@@ -57,21 +64,21 @@ class InputfieldFloatRange extends InputfieldFloat {
 		$this->addClass($this->get("displayValueField") ? "InputfieldFloatRange--with-value" : "InputfieldFloatRange--without-value");
 		$out = parent::render();
 
-		if ($this->get("displayValueField")){
+		if ($this->get("displayValueField")) {
 			$name = $this->attr('name');
 			$out .= "<input type='text' class='InputfieldFloatRange__display' value='$this->value' />";
 		}
 
 		return $out;
-
 	}
 
-	public function set($key, $value) {
-		if($key == 'inputType') {
+	public function set($key, $value)
+	{
+		if ($key == 'inputType') {
 			$this->attr('type', $value);
-		} else if($key == 'min' || $key == 'max' || $key == "step") {
-			if(strlen("$value")) {
-				$value = strpos($value, ",") !== false ? str_replace(",",".",$value) : $value;
+		} else if ($key == 'min' || $key == 'max' || $key == "step") {
+			if (strlen("$value")) {
+				$value = strpos($value, ",") !== false ? str_replace(",", ".", $value) : $value;
 				$value = strpos($value, '.') !== false ? (float) $value : (int) $value;
 			}
 		}
@@ -82,8 +89,10 @@ class InputfieldFloatRange extends InputfieldFloat {
 	 * Extend InputfieldFloat's inputType option with 'range'
 	 */
 
-	public function getConfigInputfields() {
+	public function getConfigInputfields()
+	{
 		$inputfields = parent::getConfigInputfields();
+
 
 		$f = $inputfields->get("inputType");
 		$f->addOption('range', $this->_('Range'));
@@ -99,6 +108,7 @@ class InputfieldFloatRange extends InputfieldFloat {
 		$f->required = true;
 		$f->columnWidth = 50;
 
+		/** @var InputfieldText $f */
 		$f = $this->modules->get('InputfieldText');
 		$f->attr('name', 'step');
 		$f->attr('value', $this->attr("step"));
@@ -107,6 +117,7 @@ class InputfieldFloatRange extends InputfieldFloat {
 		$f->description = $this->_('Step increment (float). Leave blank to ignore');
 		$inputfields->add($f);
 
+		/** @var InputfieldCheckbox $f */
 		$f = $this->modules->get('InputfieldCheckbox');
 		$f->attr('name', 'displayValueField');
 		$f->set("value", 1);
@@ -117,6 +128,7 @@ class InputfieldFloatRange extends InputfieldFloat {
 		$f->columnWidth = 25;
 		$inputfields->add($f);
 
+		/** @var InputfieldSelect $f */
 		$f = $this->modules->get('InputfieldSelect');
 		$f->attr('name', 'roundingMethod');
 		$f->label = $this->_('Step rounding method');
@@ -134,5 +146,4 @@ class InputfieldFloatRange extends InputfieldFloat {
 
 		return $inputfields;
 	}
-
 }
