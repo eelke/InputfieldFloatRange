@@ -22,9 +22,15 @@ $(document).ready(function () {
         // Prevent weird issue where InputfieldFloatRange__display's changes are also processed
         if ($(event.target).hasClass("InputfieldFloatRange__display")) return;
         const settings = getSettings(event.target.id);
-        const precision = Math.min(20, Math.max(0, settings.precision));
+        let val = parseFloat(event.target.value);
+
+        if (settings.precision > -1) {
+            const precision = Math.min(20, Math.max(0, settings.precision));
+            val = val.toFixed(precision);
+        }
+
         if (settings.displayValueField) {
-            event.target.nextSibling.value = parseFloat(event.target.value).toFixed(precision);
+            event.target.nextSibling.value = val;
         }
     });
 
@@ -35,8 +41,12 @@ $(document).ready(function () {
 
         const ranger = t.previousSibling;
         const settings = getSettings(ranger.id);
-        const precision = Math.min(20, Math.max(0, settings.precision));
-        const minMaxValue = Math.min(settings.max, Math.max(settings.min, parseFloat(t.value).toFixed(precision)));
+        let minMaxValue = Math.min(settings.max, Math.max(settings.min, parseFloat(t.value)));
+
+        if (settings.precision > -1) {
+            const precision = Math.min(20, Math.max(0, settings.precision));
+            minMaxValue = minMaxValue.toFixed(precision);
+        }
 
         if (!isNaN(minMaxValue)) {
             ranger.value = minMaxValue;
@@ -54,9 +64,13 @@ $(document).ready(function () {
         // TODO: Format number according to locale?
         const val = t.value.replace(/,/g, ".");
 
+        let minMaxValue = parseFloat(val);
+
         // Round to precision number of decimals
-        const precision = Math.min(20, Math.max(0, settings.precision));
-        let minMaxValue = parseFloat(val).toFixed(precision);
+        if (settings.precision > -1) {
+            const precision = Math.min(20, Math.max(0, settings.precision));
+            minMaxValue = minMaxValue.toFixed(precision);
+        }
 
         // Fit number within min and max values
         if (settings.min !== "") minMaxValue = Math.max(settings.min, minMaxValue);

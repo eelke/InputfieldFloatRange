@@ -1,6 +1,10 @@
 InputfieldFloatRange changelog
 ------------------------------
 
+007
+- Add defaultValue field (as requested by @charger)
+- Fix a silly mistake where a negative rounding (-1) resulted in removing all decimals instead
+
 006 
 - Fix bug where InputfieldFloat negative precision prevented the displayed value to be updated properly
 - Revert installs & requires, so direct installs from Modules Directory (should) work 

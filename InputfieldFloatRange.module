@@ -13,25 +13,27 @@ class InputfieldFloatRange extends InputfieldFloat
 	public static function getModuleInfo()
 	{
 		return array(
-			'title' => __('Float (Range)', __FILE__),
-			'summary' => __('Range slider inputfield, with precision, step values & optional manual override', __FILE__), // Module Summary
-			'version' => 006,
-			'permanent' => false,
-			'icon' => 'sliders',
-			'href' => 'https://github.com/eelke/InputfieldFloatRange',
-			'author' => 'Eelke Feenstra, eelke.net',
-			'installs' => ["FieldtypeFloatRange"],
-			'requires' => ["ProcessWire>=3.0.83"]
+			"title" => __("Float (Range)", __FILE__),
+			"summary" => __("Range slider inputfield, with precision, step values & optional manual override", __FILE__), // Module Summary
+			"version" => 7,
+			"permanent" => false,
+			"icon" => "sliders",
+			"href" => "https://github.com/eelke/InputfieldFloatRange",
+			"author" => "Eelke Feenstra, eelke.net",
+			"installs" => ["FieldtypeFloatRange"],
+			"requires" => ["ProcessWire>=3.0.83"]
 		);
 	}
 
 	public function init()
 	{
 		parent::init();
-		$this->set('displayValueField', 0);
-		$this->set("inputType", 'range');
+		$this->set("displayValueField", 0);
+		$this->set("inputType", "range");
 		$this->set("roundingMethod", "round");
+		$this->set("defaultValue", ""); // blank means not set
 		$this->attr("step", ""); // blank means not set
+
 		$this->attr("min", "0");
 		$this->attr("max", "100");
 	}
@@ -41,52 +43,103 @@ class InputfieldFloatRange extends InputfieldFloat
 
 		parent::renderReady();
 
-		$otherFields = $this->config->js('InputfieldFloatRange') ? $this->config->js('InputfieldFloatRange') : [];
+		$otherFields = $this->config->js("InputfieldFloatRange") ? $this->config->js("InputfieldFloatRange") : [];
 
-		$this->config->js('InputfieldFloatRange', array_merge($otherFields, [
+		$this->config->js("InputfieldFloatRange", array_merge($otherFields, [
 			"Inputfield_" . $this->attr("name") => [
-				'precision' => $this->get("precision"),
-				'rounding' => $this->get("roundingMethod"),
-				'displayValueField' => $this->get('displayValueField'),
-				'min' => $this->attr("min"),
-				'max' => $this->attr("max"),
-				'step' => (float) $this->attr("step")
+				"precision" => $this->get("precision"),
+				"rounding" => $this->get("roundingMethod"),
+				"displayValueField" => $this->get("displayValueField"),
+				"defaultValue" => $this->attr("defaultValue"),
+				"min" => $this->attr("min"),
+				"max" => $this->attr("max"),
+				"step" => (float) $this->attr("step")
 			]
 		]));
 	}
 
+
 	public function render()
 	{
 
-		if ($this->attr("step") == "" || ($this->get("displayValueField") && $this->get("roundingMethod") == 'disabled')) {
+		$attrs = $this->getAttributes();
+
+		if ($this->attr("step") == "" || ($this->get("displayValueField") && $this->get("roundingMethod") == "disabled")) {
 			$this->attr("step", "any");
 		}
 		$this->addClass($this->get("displayValueField") ? "InputfieldFloatRange--with-value" : "InputfieldFloatRange--without-value");
+
+		// If there is no value:
+		if (!strlen($attrs["value"])) {
+
+			$min = (float) $this->get("min");
+			$max = (float) $this->get("max");
+
+			// Add optional default value 
+			if (strlen($this->get("defaultValue"))) {
+
+				// Make sure to fit defaultValue between min and max values 
+				$defaultValue = max($min, min((float) $this->get("defaultValue"), $max));
+
+				// Round according to settings
+				$this->value = $this->roundValue($defaultValue);
+			} else {
+				// Else set value to halfway point
+				$val = ($min + $max) / 2;
+
+				// Round according to settings
+				$this->value = $this->roundValue($val);
+			}
+			$attrs["value"] = $this->value;
+		}
+
 		$out = parent::render();
 
 		if ($this->get("displayValueField")) {
-			$name = $this->attr('name');
 			$out .= "<input type='text' class='InputfieldFloatRange__display' value='$this->value' />";
 		}
 
 		return $out;
 	}
 
+	/** Round a value to the match the current step, rouding method and precision settings 
+	 * @return float 
+	 */
+	private function roundValue(float $val)
+	{
+		$step = $this->get("step");
+		$rounding = $this->get("roundingMethod");
+		$precision = $this->get("precision");
+
+		$value = $val;
+
+		if ($step !== "" && $step !== 0) {
+			if ($rounding === "round") $value = $step * round($value / $step);
+			else if ($rounding === "floor") $value = $step * floor($value / $step);
+			else if ($rounding === "ceil") $value = $step * ceil($value / $step);
+		}
+
+		if ($precision > -1) {
+			return number_format($value, $precision, ".", "");
+		} else return $value;
+	}
+
 	public function set($key, $value)
 	{
-		if ($key == 'inputType') {
-			$this->attr('type', $value);
-		} else if ($key == 'min' || $key == 'max' || $key == "step") {
+		if ($key == "inputType") {
+			$this->attr("type", $value);
+		} else if ($key == "min" || $key == "max" || $key == "step" || $key == "defaultValue") {
 			if (strlen("$value")) {
 				$value = strpos($value, ",") !== false ? str_replace(",", ".", $value) : $value;
-				$value = strpos($value, '.') !== false ? (float) $value : (int) $value;
+				$value = strpos($value, ".") !== false ? (float) $value : (int) $value;
 			}
 		}
 		return parent::set($key, $value);
 	}
 
+
 	/**
-	 * Extend InputfieldFloat's inputType option with 'range'
+	 * Extend InputfieldFloat"s inputType option with "range"
 	 */
 
 	public function getConfigInputfields()
@@ -95,53 +148,65 @@ class InputfieldFloatRange extends InputfieldFloat
 
 
 		$f = $inputfields->get("inputType");
-		$f->addOption('range', $this->_('Range'));
-		$f->attr('value', $this->inputType);
+		$f->addOption("range", $this->_("Range"));
+		$f->attr("value", $this->inputType);
 
 		$f = $inputfields->get("min");
-		$f->description = $this->_('The minimum allowed value for this field. Default value = 0.');
+		$f->description = $this->_("The minimum allowed value for this field. Default value = 0.");
 		$f->required = true;
-		$f->columnWidth = 50;
+		$f->columnWidth = 25;
 
 		$f = $inputfields->get("max");
-		$f->description = $this->_('The maximum allowed value for this field. Default value = 100.');
+		$f->description = $this->_("The maximum allowed value for this field. Default value = 100.");
 		$f->required = true;
-		$f->columnWidth = 50;
+		$f->columnWidth = 25;
 
 		/** @var InputfieldText $f */
-		$f = $this->modules->get('InputfieldText');
-		$f->attr('name', 'step');
-		$f->attr('value', $this->attr("step"));
-		$f->label = $this->_('Step');
+		$f = $this->modules->get("InputfieldText");
+		$f->attr("name", "defaultValue");
+		$f->attr("value", $this->defaultValue);
+		$f->label = $this->_("Default value");
+		$f->description =
+			$this->_("The (optional) default value for this field. ");
+		$f->notes = $this->_("If kept empty, the slider will initially be set halfway min and max values");
+		$f->required = false;
 		$f->columnWidth = 25;
-		$f->description = $this->_('Step increment (float). Leave blank to ignore');
+		$inputfields->add($f);
+
+		/** @var InputfieldText $f */
+		$f = $this->modules->get("InputfieldText");
+		$f->attr("name", "step");
+		$f->attr("value", $this->attr("step"));
+		$f->label = $this->_("Step");
+		$f->columnWidth = 25;
+		$f->description = $this->_("Step increment (float). Leave blank to ignore");
 		$inputfields->add($f);
 
 		/** @var InputfieldCheckbox $f */
-		$f = $this->modules->get('InputfieldCheckbox');
-		$f->attr('name', 'displayValueField');
+		$f = $this->modules->get("InputfieldCheckbox");
+		$f->attr("name", "displayValueField");
 		$f->set("value", 1);
-		$f->attr('checked', $this->get('displayValueField') == 1 ? 'checked' : '');
-		$f->label = $this->_('Show value next to slider');
-		$f->label2 = $this->_('Show');
-		$f->description = $this->_('Display the input of the field next to the slider');
+		$f->attr("checked", $this->get("displayValueField") == 1 ? "checked" : "");
+		$f->label = $this->_("Show value next to slider");
+		$f->label2 = $this->_("Show");
+		$f->description = $this->_("Display the input of the field next to the slider");
 		$f->columnWidth = 25;
 		$inputfields->add($f);
 
 		/** @var InputfieldSelect $f */
-		$f = $this->modules->get('InputfieldSelect');
-		$f->attr('name', 'roundingMethod');
-		$f->label = $this->_('Step rounding method');
-		$f->description = $this->_('Select the rounding method for manually entered values (N). ');
-		$f->notes = $this->_('Unless disabled, manually entered values are rounded (using this function) when a user leaves the input field');
+		$f = $this->modules->get("InputfieldSelect");
+		$f->attr("name", "roundingMethod");
+		$f->label = $this->_("Step rounding method");
+		$f->description = $this->_("Select the rounding method for manually entered values (N). ");
+		$f->notes = $this->_("Unless disabled, manually entered values are rounded (using this function) when a user leaves the input field");
 		$f->required = true;
 		$f->showIf("displayValueField=1,step!=''");
 		$f->addOption("round", "Round (Default; Round N to the nearest step)");
 		$f->addOption("floor", "Floor (Round N to the previous step)");
 		$f->addOption("ceil", "Ceil (Round N to next step)");
 		$f->addOption("disabled", "Disabled (WARNING: This also disables the Step setting!)");
-		$f->attr('value', $this->get("roundingMethod"));
-		$f->columnWidth = 50;
+		$f->attr("value", $this->get("roundingMethod"));
+		$f->columnWidth = 75;
 		$inputfields->add($f);
 
 		return $inputfields;
