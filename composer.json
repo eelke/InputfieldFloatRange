@@ -6,6 +6,7 @@
     "processwire",
     "module"
   ],
+  "minimum-stability": "stable",
   "homepage": "https://github.com/eelke/InputfieldFloatRange",
   "license": "MIT",
   "authors": [
