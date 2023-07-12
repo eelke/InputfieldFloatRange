@@ -20,7 +20,7 @@ It includes a visible and editable value field, to override/tweak the value if r
 
 ## Usage
 
-- Clone / zip repo
+- Clone / zip repo, or run `composer require eelke.net/float-range` in your PW root
 - Install FieldtypeFloatRange, this automatically installs the Inputfield
 - Create new field of type `Float (range)` or convert an existing `Float`, `Integer` or `Text` field.
 - To render the field's value simply echo `$page->field`
