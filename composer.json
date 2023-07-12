@@ -1,0 +1,22 @@
+{
+  "name": "eelke.net/float-range",
+  "description": "Range slider Inputfield for ProcessWire, with precision, step values & optional manual override",
+  "type": "pw-module",
+  "keywords": [
+    "processwire",
+    "module"
+  ],
+  "homepage": "https://github.com/eelke/InputfieldFloatRange",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Eelke Feenstra",
+      "homepage": "https://eelke.net",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "hari/pw-module": "~1.0"
+  }
+}

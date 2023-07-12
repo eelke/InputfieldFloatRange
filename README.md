@@ -1,17 +1,16 @@
-Float (Range) InputField
-========================
+# Float (Range) InputField
 
-### What is it?
+## What is it?
 
 The missing range slider Inputfield for Processwire.
 See also the Processwire [Forum thread](https://processwire.com/talk/topic/22430-inputfieldfloatrange-a-range-slider-inputfield/?tab=comments#comment-192449) and the [Modules directory](http://modules.processwire.com/modules/inputfield-float-range/) listing.
 
-### What does it do?
+## What does it do?
 
 This module extends InputfieldFloat and allows you to use HTML5 range sliders for number fields in your templates.
 It includes a visible and editable value field, to override/tweak the value if required.  
 
-### Features
+## Features
 
 - Min/max values
 - Precision (number of decimals)
@@ -19,14 +18,14 @@ It includes a visible and editable value field, to override/tweak the value if r
 - Optional manual override of the selected value (will still adhere to the rules above)
 - Configurable rounding of manually entered values (floor, round, ceil, disable)
 
-### Usage
+## Usage
 
 - Clone / zip repo
 - Install FieldtypeFloatRange, this automatically installs the Inputfield
 - Create new field of type `Float (range)` or convert an existing `Float`, `Integer` or `Text` field.
 - To render the field's value simply echo `$page->field`
 
-### Demo
+## Demo
 A field with Min=0, Max=1, Step=0.2, Precision=2:
 ![](https://github.com/eelke/InputfieldFloatRange/raw/master/demo/RangeSlider-demo-1.gif)
 
@@ -34,7 +33,7 @@ A field with Min=0, Max=1, Step=0.2, Precision=2:
 Field with settings Min=0, Max=200, Step=0.25, Precision=2
 ![](https://github.com/eelke/InputfieldFloatRange/raw/master/demo/RangeSlider-demo-2.gif)
 
-#### Todo
+## Todo
 
 - Make the display-field's size configurable (will use the Input Size field setting)
 - Hopefully become redundant
