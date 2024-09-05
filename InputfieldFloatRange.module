@@ -15,7 +15,7 @@ class InputfieldFloatRange extends InputfieldFloat
 		return array(
 			"title" => __("Float (Range)", __FILE__),
 			"summary" => __("Range slider inputfield, with precision, step values & optional manual override", __FILE__), // Module Summary
-			"version" => 7,
+			"version" => 9,
 			"permanent" => false,
 			"icon" => "sliders",
 			"href" => "https://github.com/eelke/InputfieldFloatRange",
@@ -113,7 +113,7 @@ class InputfieldFloatRange extends InputfieldFloat
 
 		$value = $val;
 
-		if ($step !== "" && $step !== 0) {
+		if ($step !== "" && $step !== 0 && $step !== "any") {
 			if ($rounding === "round") $value = $step * round($value / $step);
 			else if ($rounding === "floor") $value = $step * floor($value / $step);
 			else if ($rounding === "ceil") $value = $step * ceil($value / $step);

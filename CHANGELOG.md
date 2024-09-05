@@ -1,5 +1,9 @@
 # InputfieldFloatRange changelog
 
+## 009
+
+- Fix [issue](https://github.com/eelke/InputfieldFloatRange/issues/3) where when `$step` was set to `'any'` (as reported by @romaincazier).
+
 ## 008
 
 - Add composer.json and add to Packagist
@@ -9,7 +13,7 @@
 - Add defaultValue field (as requested by @charger)
 - Fix a silly mistake where a negative rounding (-1) resulted in removing all decimals instead
 
-## 006 
+## 006
 
 - Fix bug where InputfieldFloat negative precision prevented the displayed value to be updated properly
 - Revert installs & requires, so direct installs from Modules Directory (should) work 
